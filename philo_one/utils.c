@@ -6,41 +6,25 @@
 /*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 16:49:37 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/06/29 17:27:27 by vde-dios         ###   ########.fr       */
+/*   Updated: 2020/06/29 18:01:41 by vde-dios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-static int	ft_isthespace(int c)
-{
-	if (c == '\v' || c == '\n' || c == '\t' ||
-		c == '\r' || c == '\f' || c == ' ')
-		return (1);
-	return (0);
-}
-
 int			ft_atoi(const char *str)
 {
-	int sign;
 	int nbr;
 
-	sign = 1;
 	nbr = 0;
-	while (ft_isthespace(*str))
-		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
 	while (*str >= '0' && *str <= '9')
 	{
 		nbr = (nbr * 10) + (*str - '0');
 		str++;
 	}
-	return (nbr * sign);
+	if (*str)
+		return (0);
+	return (nbr);
 }
 
 void		ft_itoa_write(long int num)
@@ -69,3 +53,17 @@ void		ft_print_philo(long int timestamp, int philo, char action)
 	else if (action == 'd')
 		write(1, " died\n", 6);
 }
+
+int		ft_save_args(int argc, char **argv, t_philo_info *info)
+{
+	if (!(info->n_philos = ft_atoi(argv[1]))
+		|| !(info->time_die = ft_atoi(argv[2]))
+		|| !(info->time_eat = ft_atoi(argv[3]))
+		|| !(info->time_sleep = ft_atoi(argv[4])))
+		return (0);
+	if (argc == 6
+		&& !(info->n_eat = ft_atoi(argv[5])))
+		return (0);
+	return (1);
+}
+

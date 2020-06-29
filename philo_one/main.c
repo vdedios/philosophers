@@ -6,16 +6,11 @@
 /*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 16:33:37 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/06/29 17:24:48 by vde-dios         ###   ########.fr       */
+/*   Updated: 2020/06/29 18:01:52 by vde-dios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-
-/*
-** number_of_philosophers time_to_die time_to_eat time_to_sleep
-** [number_of_times_each_philosopher_must_eat]
-*/
 
 void	*philo_eat(void *ptr)
 {
@@ -35,14 +30,26 @@ void	*philo_think(void *ptr)
 	return (NULL);
 }
 
-int main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
-	pthread_t 		philo;
-	pthread_mutex_t lock;
+	pthread_t		philo;
+	t_philo_info	info;
+	int				i;
 
-	pthread_mutex_init(&lock, NULL);
-	pthread_create(&philo, NULL, philo_eat, (void *)&lock);
+	i = 0;
+	if (argc < 5 || argc > 6)
+	{
+		write(1, "wrong number of args :(\n", 24);
+		return (0);
+	}
+	if (!ft_save_args(argc, argv, &info))
+	{
+		write(1, "wrong args :(\n", 14);
+		return (0);
+	}
+	pthread_mutex_init(&info.lock, NULL);
+	pthread_create(&philo, NULL, philo_eat, (void *)&info);
 	pthread_join(philo, NULL);
-	pthread_mutex_destroy(&lock);
+	pthread_mutex_destroy(&info.lock);
 	return (0);
 }
