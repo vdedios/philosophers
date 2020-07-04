@@ -1,39 +1,53 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/28 16:33:37 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/06/29 18:01:52 by vde-dios         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo_one.h"
 
-void	*philo_eat(void *ptr)
+void	*philo_execution(void *ptr)
 {
-	ft_print_philo(123456, 0, 'e');
+	t_philo_info philo;
+
+	philo = *(t_philo_info *)ptr;
+	while (1)
+	{
+		philo_get_forks((t_philo_info *)ptr);
+		philo_eat((t_philo_info *)ptr);
+		philo_sleep(*(t_philo_info *)ptr);
+		philo_think(*(t_philo_info *)ptr);
+	}
 	return (NULL);
 }
 
-void	*philo_sleep(void *ptr)
+void	*create_philos(t_general_info *general)
 {
-	ft_print_philo(123456, 0, 's');
-	return (NULL);
-}
+	t_philo_info	*philo;
+	int				i;
 
-void	*philo_think(void *ptr)
-{
-	ft_print_philo(123456, 0, 't');
+	i = 0;
+	gettimeofday(&general->init_time, NULL);
+	pthread_mutex_init(&general->message, NULL);
+	if (!(philo = malloc(general->n_philos * sizeof(t_philo_info))))
+		return (NULL);
+	general->lock_fork = ft_initialize_fork_locks(*general);
+	while (i < general->n_philos)
+	{
+		philo[i].num_philo = i;
+		philo[i].general = general;
+		ft_get_forks_position(&philo[i]);
+		gettimeofday(&philo[i].critical_time, NULL);
+		pthread_create(&philo[i].thread, NULL
+				, philo_execution, (void *)&philo[i]);
+		i++;
+	}
+	pthread_join(philo[0].thread, NULL);
+	pthread_mutex_destroy(&general->message);
+	//liberar tenedores
+	//liberar cerrojos tenedores
+	//free(philo);
 	return (NULL);
 }
 
 int		main(int argc, char **argv)
 {
-	pthread_t		philo;
-	t_philo_info	info;
+	t_general_info	general;
+	struct timeval	time;
 	int				i;
 
 	i = 0;
@@ -42,14 +56,11 @@ int		main(int argc, char **argv)
 		write(1, "wrong number of args :(\n", 24);
 		return (0);
 	}
-	if (!ft_save_args(argc, argv, &info))
+	if (!ft_save_args(argc, argv, &general))
 	{
 		write(1, "wrong args :(\n", 14);
 		return (0);
 	}
-	pthread_mutex_init(&info.lock, NULL);
-	pthread_create(&philo, NULL, philo_eat, (void *)&info);
-	pthread_join(philo, NULL);
-	pthread_mutex_destroy(&info.lock);
+	create_philos(&general);
 	return (0);
 }
