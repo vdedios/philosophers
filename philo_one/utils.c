@@ -6,7 +6,7 @@
 /*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 16:49:37 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/07/04 22:18:16 by vde-dios         ###   ########.fr       */
+/*   Updated: 2020/07/05 21:10:05 by vde-dios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,33 @@ void			ft_itoa_write(long int num)
 	write(1, &digit, 1);
 }
 
-void			ft_print_philo(long int timestamp, int philo, char action)
+void			ft_print_philo(t_philo_info *philo, int action)
 {
-	ft_itoa_write(timestamp);
-	write(1, " philosopher ", 13);
-	ft_itoa_write((long int)philo);
-	if (action == 'f')
+	struct timeval	current_time;
+
+	pthread_mutex_lock(&philo->general->message);
+	gettimeofday(&current_time, NULL);
+	ft_itoa_write(ft_get_current_time(current_time, philo->general->init_time));
+	write(1, " philosopher_", 13);
+	ft_itoa_write(philo->num_philo);
+	if (action == GOT_FORK)
 		write(1, " has taken a fork\n", 18);
-	else if (action == 'e')
+	else if (action == EATING)
 		write(1, " is eating\n", 11);
-	else if (action == 's')
+	else if (action == SLEEPING)
 		write(1, " is sleeping\n", 13);
-	else if (action == 't')
+	else if (action == THINKING)
 		write(1, " is thinking\n", 13);
-	else if (action == 'd')
-		write(1, " died\n", 6);
+	else if (action == IS_DEAD)
+	{
+		if (ft_get_current_time(current_time,
+			philo->critical_time) > philo->general->time_die)
+		{
+			write(1, " died\n", 6);
+			exit(1);
+		}
+	}
+	pthread_mutex_unlock(&philo->general->message);
 }
 
 int				ft_save_args(int argc, char **argv, t_general_info *info)
@@ -68,7 +80,7 @@ int				ft_save_args(int argc, char **argv, t_general_info *info)
 }
 
 long int		ft_get_current_time(struct timeval current_time
-		, struct timeval init_time)
+				, struct timeval init_time)
 {
 	long int	t;
 
@@ -77,17 +89,22 @@ long int		ft_get_current_time(struct timeval current_time
 	return (t);
 }
 
-pthread_mutex_t	*ft_initialize_fork_locks(t_general_info general)
+void			*ft_init_locks(t_general_info *general)
 {
 	int i;
-	pthread_mutex_t	*lock_fork;
 
 	i = -1;
-	if (!(lock_fork = malloc(general.n_philos * sizeof(pthread_mutex_t))))
+	if (!(general->lock_fork = malloc(general->n_philos * sizeof(pthread_mutex_t))))
 		return (NULL);
-	while (++i < general.n_philos)
-		pthread_mutex_init(&lock_fork[i], NULL);
-	return (lock_fork);
+	if (!(general->locks = malloc(general->n_philos * sizeof(int))))
+		return (NULL);
+	while (++i < general->n_philos)
+	{
+		pthread_mutex_init(&general->lock_fork[i], NULL);
+		general->locks[i] = 0;
+	}
+	pthread_mutex_init(&general->message, NULL);
+	return (general->lock_fork);
 }
 
 void			ft_get_forks_position(t_philo_info *philo)

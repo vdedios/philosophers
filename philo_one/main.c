@@ -2,15 +2,12 @@
 
 void	*philo_execution(void *ptr)
 {
-	t_philo_info philo;
-
-	philo = *(t_philo_info *)ptr;
 	while (1)
 	{
 		philo_get_forks((t_philo_info *)ptr);
 		philo_eat((t_philo_info *)ptr);
-		philo_sleep(*(t_philo_info *)ptr);
-		philo_think(*(t_philo_info *)ptr);
+		philo_sleep((t_philo_info *)ptr);
+		philo_think((t_philo_info *)ptr);
 	}
 	return (NULL);
 }
@@ -22,10 +19,10 @@ void	*create_philos(t_general_info *general)
 
 	i = 0;
 	gettimeofday(&general->init_time, NULL);
-	pthread_mutex_init(&general->message, NULL);
+	if (!ft_init_locks(general))
+		return (NULL);
 	if (!(philo = malloc(general->n_philos * sizeof(t_philo_info))))
 		return (NULL);
-	general->lock_fork = ft_initialize_fork_locks(*general);
 	while (i < general->n_philos)
 	{
 		philo[i].num_philo = i;
@@ -37,7 +34,8 @@ void	*create_philos(t_general_info *general)
 		i++;
 	}
 	pthread_join(philo[0].thread, NULL);
-	pthread_mutex_destroy(&general->message);
+	//Matar cerrojos
+	//pthread_mutex_destroy(&general->message);
 	//liberar tenedores
 	//liberar cerrojos tenedores
 	//free(philo);

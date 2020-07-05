@@ -132,7 +132,6 @@ set verbosefile=~/.vim/vimdebug.txt
 set viminfo='1000
 set visualbell
 set wildmenu
-set window=45
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -147,8 +146,9 @@ argglobal
 $argadd philo_one.c
 set stal=2
 tabnew
+tabnew
 tabrewind
-edit philo_actions.c
+edit utils.c
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -159,8 +159,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 111 + 136) / 272)
-exe 'vert 2resize ' . ((&columns * 160 + 136) / 272)
+exe 'vert 1resize ' . ((&columns * 110 + 136) / 272)
+exe 'vert 2resize ' . ((&columns * 161 + 136) / 272)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -286,14 +286,60 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-5
+41
 normal! zo
-let s:l = 9 - ((8 * winheight(0) + 21) / 43)
+41
+normal! zo
+41
+normal! zo
+41
+normal! zo
+41
+normal! zo
+41
+normal! zo
+41
+normal! zo
+41
+normal! zo
+43
+normal! zo
+57
+normal! zo
+43
+normal! zc
+65
+normal! zo
+65
+normal! zc
+77
+normal! zo
+77
+normal! zo
+79
+normal! zo
+83
+normal! zo
+79
+normal! zc
+90
+normal! zo
+94
+normal! zo
+96
+normal! zo
+104
+normal! zo
+106
+normal! zo
+104
+normal! zc
+let s:l = 79 - ((62 * winheight(0) + 21) / 43)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-9
-normal! 07|
+79
+normal! 01|
 lcd ~/Desktop/philosophers/philo_one
 wincmd w
 argglobal
@@ -424,41 +470,485 @@ setlocal wrap
 setlocal wrapmargin=0
 5
 normal! zo
-9
+7
 normal! zo
-12
-normal! zo
-14
+17
 normal! zo
 23
 normal! zo
-32
+25
 normal! zo
-35
+28
 normal! zo
-38
+33
 normal! zo
-38
+33
 normal! zo
-49
+47
 normal! zo
-56
+54
 normal! zo
-61
+59
 normal! zo
-49
+47
 normal! zc
-let s:l = 28 - ((23 * winheight(0) + 21) / 43)
+let s:l = 6 - ((5 * winheight(0) + 21) / 43)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-28
-normal! 025|
+6
+normal! 05|
 lcd ~/Desktop/philosophers/philo_one
 wincmd w
-2wincmd w
-exe 'vert 1resize ' . ((&columns * 111 + 136) / 272)
-exe 'vert 2resize ' . ((&columns * 160 + 136) / 272)
+exe 'vert 1resize ' . ((&columns * 110 + 136) / 272)
+exe 'vert 2resize ' . ((&columns * 161 + 136) / 272)
+tabnext
+edit ~/Desktop/philosophers/philo_one/sleep.c
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+wincmd _ | wincmd |
+vsplit
+2wincmd h
+wincmd w
+wincmd w
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+exe 'vert 1resize ' . ((&columns * 74 + 136) / 272)
+exe 'vert 2resize ' . ((&columns * 85 + 136) / 272)
+exe 'vert 3resize ' . ((&columns * 111 + 136) / 272)
+argglobal
+setlocal keymap=
+setlocal noarabic
+setlocal noautoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+set cursorline
+setlocal cursorline
+setlocal cursorlineopt=both
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal noexpandtab
+if &filetype != 'c'
+setlocal filetype=c
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+set foldmethod=indent
+setlocal foldmethod=indent
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=bin,octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal scrolloff=-1
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal showbreak=
+setlocal sidescrolloff=-1
+setlocal signcolumn=auto
+setlocal smartindent
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%{lightline#link()}%#LightlineLeft_inactive_0#%(\ %t\ %)%{(&modified||!&modifiable)||1||Devicons_Filetype()!=#\"\"?\"\":\"\"}%(\ %M\ %)%{(&modified||!&modifiable)&&(1||Devicons_Filetype()!=#\"\")?\"\":\"\"}%(\ %{&fenc!=#\"\"?&fenc:&enc}[%{&ff}]\ %)%{Devicons_Filetype()!=#\"\"?\"\":\"\"}%(\ %{Devicons_Filetype()}\ %)%#LightlineLeft_inactive_0_1#%#LightlineMiddle_inactive#%=%#LightlineRight_inactive_0_1#%#LightlineRight_inactive_0#%(\ %2p%%\ %3l:%-2v\ %)
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'c'
+setlocal syntax=c
+endif
+setlocal tabstop=4
+setlocal tagcase=
+setlocal tagfunc=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal undofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal wincolor=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+5
+normal! zo
+10
+normal! zo
+10
+normal! zo
+15
+normal! zo
+15
+normal! zo
+let s:l = 15 - ((14 * winheight(0) + 21) / 43)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+15
+normal! 013|
+lcd ~/Desktop/philosophers/philo_one
+wincmd w
+argglobal
+if bufexists("~/Desktop/philosophers/philo_one/eat.c") | buffer ~/Desktop/philosophers/philo_one/eat.c | else | edit ~/Desktop/philosophers/philo_one/eat.c | endif
+setlocal keymap=
+setlocal noarabic
+setlocal noautoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+set cursorline
+setlocal cursorline
+setlocal cursorlineopt=both
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal noexpandtab
+if &filetype != 'c'
+setlocal filetype=c
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+set foldmethod=indent
+setlocal foldmethod=indent
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=bin,octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal scrolloff=-1
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal showbreak=
+setlocal sidescrolloff=-1
+setlocal signcolumn=auto
+setlocal smartindent
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%{lightline#link()}%#LightlineLeft_inactive_0#%(\ %t\ %)%{(&modified||!&modifiable)||1||Devicons_Filetype()!=#\"\"?\"\":\"\"}%(\ %M\ %)%{(&modified||!&modifiable)&&(1||Devicons_Filetype()!=#\"\")?\"\":\"\"}%(\ %{&fenc!=#\"\"?&fenc:&enc}[%{&ff}]\ %)%{Devicons_Filetype()!=#\"\"?\"\":\"\"}%(\ %{Devicons_Filetype()}\ %)%#LightlineLeft_inactive_0_1#%#LightlineMiddle_inactive#%=%#LightlineRight_inactive_0_1#%#LightlineRight_inactive_0#%(\ %2p%%\ %3l:%-2v\ %)
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'c'
+setlocal syntax=c
+endif
+setlocal tabstop=4
+setlocal tagcase=
+setlocal tagfunc=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal undofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal wincolor=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+5
+normal! zo
+6
+normal! zo
+6
+normal! zo
+11
+normal! zo
+11
+normal! zo
+20
+normal! zo
+let s:l = 24 - ((23 * winheight(0) + 21) / 43)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+24
+normal! 05|
+lcd ~/Desktop/philosophers/philo_one
+wincmd w
+argglobal
+if bufexists("~/Desktop/philosophers/philo_one/get_forks.c") | buffer ~/Desktop/philosophers/philo_one/get_forks.c | else | edit ~/Desktop/philosophers/philo_one/get_forks.c | endif
+setlocal keymap=
+setlocal noarabic
+setlocal noautoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+set cursorline
+setlocal cursorline
+setlocal cursorlineopt=both
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal noexpandtab
+if &filetype != 'c'
+setlocal filetype=c
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+set foldmethod=indent
+setlocal foldmethod=indent
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=bin,octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal scrolloff=-1
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal showbreak=
+setlocal sidescrolloff=-1
+setlocal signcolumn=auto
+setlocal smartindent
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%{lightline#link()}%#LightlineLeft_active_0#%(\ %{lightline#mode()}\ %)%{(&paste)?\"\":\"\"}%(\ %{&paste?\"PASTE\":\"\"}\ %)%#LightlineLeft_active_0_1#%#LightlineLeft_active_1#%(\ %R\ %)%{(&readonly)&&(1||(&modified||!&modifiable)||1||Devicons_Filetype()!=#\"\")?\"\":\"\"}%(\ %t\ %)%{(&modified||!&modifiable)||1||Devicons_Filetype()!=#\"\"?\"\":\"\"}%(\ %M\ %)%{(&modified||!&modifiable)&&(1||Devicons_Filetype()!=#\"\")?\"\":\"\"}%(\ %{&fenc!=#\"\"?&fenc:&enc}[%{&ff}]\ %)%{Devicons_Filetype()!=#\"\"?\"\":\"\"}%(\ %{Devicons_Filetype()}\ %)%#LightlineLeft_active_1_2#%#LightlineMiddle_active#%=%#LightlineRight_active_2_3#%#LightlineRight_active_2#%(\ %{coc#status()}\ %)%#LightlineRight_active_1_2#%#LightlineRight_active_1#%(\ %{PomodoroStatus()}\ %)%#LightlineRight_active_0_1#%#LightlineRight_active_0#%(\ %2p%%\ %3l:%-2v\ %)
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'c'
+setlocal syntax=c
+endif
+setlocal tabstop=4
+setlocal tagcase=
+setlocal tagfunc=
+setlocal tags=
+setlocal termwinkey=
+setlocal termwinscroll=10000
+setlocal termwinsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal undofile
+setlocal undolevels=-123456
+setlocal varsofttabstop=
+setlocal vartabstop=
+setlocal wincolor=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+5
+normal! zo
+let s:l = 11 - ((10 * winheight(0) + 21) / 43)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+11
+normal! 05|
+lcd ~/Desktop/philosophers/philo_one
+wincmd w
+3wincmd w
+exe 'vert 1resize ' . ((&columns * 74 + 136) / 272)
+exe 'vert 2resize ' . ((&columns * 85 + 136) / 272)
+exe 'vert 3resize ' . ((&columns * 111 + 136) / 272)
 tabnext
 edit ~/Desktop/philosophers/philo_one/philo_one.h
 set splitbelow splitright
@@ -594,27 +1084,63 @@ setlocal wrap
 setlocal wrapmargin=0
 29
 normal! zo
-40
+42
 normal! zo
-let s:l = 40 - ((21 * winheight(0) + 21) / 43)
+55
+normal! zo
+55
+normal! zo
+55
+normal! zo
+55
+normal! zo
+55
+normal! zo
+55
+normal! zo
+55
+normal! zo
+55
+normal! zo
+55
+normal! zo
+58
+normal! zo
+58
+normal! zo
+58
+normal! zo
+58
+normal! zo
+58
+normal! zo
+58
+normal! zo
+58
+normal! zo
+let s:l = 32 - ((9 * winheight(0) + 21) / 43)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-40
-normal! 022|
+32
+normal! 021|
 lcd ~/Desktop/philosophers/philo_one
-tabnext 1
+tabnext 2
 set stal=1
-badd +12 ~/Desktop/philosophers/philo_one/main.c
+badd +42 ~/Desktop/philosophers/philo_one/utils.c
 badd +1 ~/Desktop/philosophers/philo_one/philo_one.c
-badd +0 ~/Desktop/Deskt/philosophers/philo_one/utils.c
-badd +0 ~/Desktop/Deskt/philosophers/philo_one/philo_one.h
+badd +10 ~/Desktop/philosophers/philo_one/sleep.c
+badd +1 ~/Desktop/philosophers/philo_one/philo_one.h
+badd +1 ~/Desktop/philosophers/philo_one/main.c
+badd +12 ~/Desktop/philosophers/philo_one/eat.c
+badd +13 ~/Desktop/philosophers/philo_one/get_forks.c
+badd +1 ~/Desktop/philosophers/philo_one/philo_actions.c
+badd +1 ~/Desktop/Deskt/philosophers/philo_one/utils.c
+badd +1 ~/Desktop/Deskt/philosophers/philo_one/philo_one.h
 badd +15 ~/Desktop/Deskt/philosophers/philo_one/philo_one.c
 badd +31 ~/Desktop/Deskt/philosophers/philo_one/main.c
 badd +15 ~/Desktop/Deskt/miniRT/dependencies/libft/ft_atoi.c
-badd +39 ~/Desktop/philosophers/philo_one/utils.c
-badd +1 ~/Desktop/philosophers/philo_one/philo_one.h
-badd +34 ~/Desktop/philosophers/philo_one/philo_actions.c
+badd +12 ~/Desktop/philosophers/philo_one/think.c
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif
