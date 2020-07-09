@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/28 16:49:37 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/07/05 21:10:05 by vde-dios         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philo_one.h"
 
 int				ft_atoi(const char *str)
@@ -27,14 +15,32 @@ int				ft_atoi(const char *str)
 	return (nbr);
 }
 
-void			ft_itoa_write(long int num)
+static long int	ft_size_num(long int n)
 {
+	long int i;
+
+	i = 1;
+	while (n >= 10)
+	{
+		n /= 10;
+		i *= 10;
+	}
+	return (i);
+}
+
+void			ft_itoa_write(long int n)
+{
+	long int	size;
 	char		digit;
 
-	if (num / 10 > 0)
-		ft_itoa_write(num / 10);
-	digit = num % 10 + '0';
-	write(1, &digit, 1);
+	size = ft_size_num(n);
+	while (size > 0)
+	{
+		digit = n / size + '0';
+		write(1, &digit, 1);
+		n = n % size;
+		size /= 10;
+	}
 }
 
 void			ft_print_philo(t_philo_info *philo, int action)
@@ -54,33 +60,43 @@ void			ft_print_philo(t_philo_info *philo, int action)
 		write(1, " is sleeping\n", 13);
 	else if (action == THINKING)
 		write(1, " is thinking\n", 13);
-	else if (action == IS_DEAD)
+	else if (action == DEAD)
 	{
-		if (ft_get_current_time(current_time,
-			philo->critical_time) > philo->general->time_die)
-		{
-			write(1, " died\n", 6);
-			exit(1);
-		}
+		write(1, " died\n", 6);
+		exit(1);
 	}
 	pthread_mutex_unlock(&philo->general->message);
+}
+
+void			ft_is_philo_alive(t_philo_info *philo)
+{
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	if (ft_get_current_time(current_time,
+				philo->critical_time) > philo->general->time_die + 1)
+		ft_print_philo(philo, DEAD);
 }
 
 int				ft_save_args(int argc, char **argv, t_general_info *info)
 {
 	if (!(info->n_philos = ft_atoi(argv[1]))
-		|| !(info->time_die = ft_atoi(argv[2]))
-		|| !(info->time_eat = ft_atoi(argv[3]))
-		|| !(info->time_sleep = ft_atoi(argv[4])))
+			|| !(info->time_die = ft_atoi(argv[2]))
+			|| !(info->time_eat = ft_atoi(argv[3]))
+			|| !(info->time_sleep = ft_atoi(argv[4])))
 		return (0);
-	if (argc == 6
-		&& !(info->n_eat = ft_atoi(argv[5])))
-		return (0);
+	if (argc == 6)
+	{
+		if (!(info->n_eat = ft_atoi(argv[5])))
+			return (0);
+	}
+	else
+		info->n_eat = -1;
 	return (1);
 }
 
 long int		ft_get_current_time(struct timeval current_time
-				, struct timeval init_time)
+									, struct timeval init_time)
 {
 	long int	t;
 
@@ -94,16 +110,24 @@ void			*ft_init_locks(t_general_info *general)
 	int i;
 
 	i = -1;
-	if (!(general->lock_fork = malloc(general->n_philos * sizeof(pthread_mutex_t))))
+	if (!(general->lock_fork = malloc(general->n_philos
+		* sizeof(pthread_mutex_t))))
 		return (NULL);
-	if (!(general->locks = malloc(general->n_philos * sizeof(int))))
+	if (!(general->forks = malloc(general->n_philos * sizeof(int))))
+		return (NULL);
+	if (!(general->turns = malloc(general->n_philos * sizeof(int))))
 		return (NULL);
 	while (++i < general->n_philos)
 	{
 		pthread_mutex_init(&general->lock_fork[i], NULL);
-		general->locks[i] = 0;
+		general->forks[i] = 1;
+		general->turns[i] = -1;
 	}
+	general->round = 0;
+	general->pos = 0;
 	pthread_mutex_init(&general->message, NULL);
+	pthread_mutex_init(&general->waiter, NULL);
+	pthread_mutex_init(&general->counter, NULL);
 	return (general->lock_fork);
 }
 

@@ -6,8 +6,7 @@ void	*philo_execution(void *ptr)
 	{
 		philo_get_forks((t_philo_info *)ptr);
 		philo_eat((t_philo_info *)ptr);
-		philo_sleep((t_philo_info *)ptr);
-		philo_think((t_philo_info *)ptr);
+		philo_sleep_and_think((t_philo_info *)ptr);
 	}
 	return (NULL);
 }
@@ -21,6 +20,7 @@ void	*create_philos(t_general_info *general)
 	gettimeofday(&general->init_time, NULL);
 	if (!ft_init_locks(general))
 		return (NULL);
+	//No  hace falta generar un array de philos
 	if (!(philo = malloc(general->n_philos * sizeof(t_philo_info))))
 		return (NULL);
 	while (i < general->n_philos)

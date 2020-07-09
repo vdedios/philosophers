@@ -1,8 +1,14 @@
 #ex files
-miniRT
-miniRT.dSYM
-miniRT_bonus
-miniRT_bonus.dSYM
+*/philo_one
+*/philo_one.dSYM
+*/philo_two
+*/philo_two.dSYM
+*/philo_three
+*/philo_three.dSYM
+
+#Vim session files
+Session.vim
+*/Session.vim
 
 #Test folders and files
 pft
