@@ -28,15 +28,14 @@ void	*philo_eat(t_philo_info *philo)
 	{
 		philo->general->round++;
 		philo->general->philos_finished_round = 0;
-		pthread_mutex_lock(&philo->general->message);
-		printf("------ROUND COMPLETED: %d--------\n", philo->general->round);
-		pthread_mutex_unlock(&philo->general->message);
 	}
 	if (philo->general->round == philo->general->n_eat)
 	{
 		pthread_mutex_lock(&philo->general->message);
-		write(1, "all philos have finished eating.", 32);
-		exit(1);
+		write(1, "all philos have finished eating ", 32);
+		ft_itoa_write(philo->general->round);
+		write(1, " rounds.\n", 9);
+		pthread_mutex_unlock(&philo->general->get_out);
 	}
 	philo->general->forks[philo->fork_right] = 1;
 	philo->general->forks[philo->fork_left] = 1;

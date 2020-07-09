@@ -6,7 +6,7 @@
 /*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 17:46:19 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/07/09 09:40:09 by vde-dios         ###   ########.fr       */
+/*   Updated: 2020/07/09 12:05:26 by vde-dios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ typedef struct		s_general_info{
 	pthread_mutex_t message;
 	pthread_mutex_t waiter;
 	pthread_mutex_t counter;
+	pthread_mutex_t get_out;
 	pthread_mutex_t *lock_fork;
+	pthread_t		watchdog;
 	struct timeval	init_time;
 	int				*forks;
 	int				*turns;
@@ -50,8 +52,8 @@ typedef struct		s_general_info{
 }					t_general_info;
 
 typedef struct		s_philo_info{
-	t_general_info	*general;
 	pthread_t		thread;
+	t_general_info	*general;
 	struct timeval	critical_time;
 	int				num_philo;
 	int				fork_left;
@@ -70,7 +72,7 @@ void				ft_is_philo_alive(t_philo_info *philo);
 int					ft_save_args(int argc, char **argv, t_general_info *info);
 long int			ft_get_current_time(struct timeval current_time
 										, struct timeval init_time);
-void				*ft_init_locks(t_general_info *general);
+void				*ft_init_locks_and_variables(t_general_info *general);
 void				ft_get_forks_position(t_philo_info *philo);
 int					have_already_eaten_this_round(t_philo_info *philo);
 int					is_your_turn(t_philo_info *philo);

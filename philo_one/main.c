@@ -1,5 +1,14 @@
 #include "philo_one.h"
 
+void	*death_watchdog(void *ptr)
+{	
+	t_general_info *general;
+
+	general = (t_general_info *)ptr;
+	pthread_mutex_lock(&general->get_out);
+	return (NULL);
+}
+
 void	*philo_execution(void *ptr)
 {
 	while (1)
@@ -11,6 +20,25 @@ void	*philo_execution(void *ptr)
 	return (NULL);
 }
 
+void	kill_all(t_philo_info *philo)
+{
+	t_general_info *general;
+	int i;
+
+	i = -1;
+	general = philo[0].general;
+	while (++i < general->n_philos)
+		pthread_mutex_destroy(&general->lock_fork[i]);
+	pthread_mutex_destroy(&general->message);
+	pthread_mutex_destroy(&general->waiter);
+	pthread_mutex_destroy(&general->counter);
+	pthread_mutex_destroy(&general->get_out);
+	free (general->lock_fork);
+	free (general->forks);
+	free (general->turns);
+	free (philo);
+}
+
 void	*create_philos(t_general_info *general)
 {
 	t_philo_info	*philo;
@@ -18,11 +46,12 @@ void	*create_philos(t_general_info *general)
 
 	i = 0;
 	gettimeofday(&general->init_time, NULL);
-	if (!ft_init_locks(general))
+	if (!ft_init_locks_and_variables(general))
 		return (NULL);
-	//No  hace falta generar un array de philos
 	if (!(philo = malloc(general->n_philos * sizeof(t_philo_info))))
 		return (NULL);
+	pthread_create(&general->watchdog, NULL
+			, death_watchdog, (void *)general);
 	while (i < general->n_philos)
 	{
 		philo[i].num_philo = i;
@@ -33,12 +62,8 @@ void	*create_philos(t_general_info *general)
 				, philo_execution, (void *)&philo[i]);
 		i++;
 	}
-	pthread_join(philo[0].thread, NULL);
-	//Matar cerrojos
-	//pthread_mutex_destroy(&general->message);
-	//liberar tenedores
-	//liberar cerrojos tenedores
-	//free(philo);
+	pthread_join(general->watchdog, NULL);
+	kill_all(philo);
 	return (NULL);
 }
 
