@@ -6,7 +6,7 @@
 /*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 17:46:19 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/07/09 08:59:33 by vde-dios         ###   ########.fr       */
+/*   Updated: 2020/07/09 09:40:09 by vde-dios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ typedef struct		s_philo_info{
 	int				times_eaten;
 }					t_philo_info;
 
+/*
+** Utils
+*/
 
 int					ft_atoi(const char *str);
 void				ft_itoa_write(long int num);
@@ -69,6 +72,9 @@ long int			ft_get_current_time(struct timeval current_time
 										, struct timeval init_time);
 void				*ft_init_locks(t_general_info *general);
 void				ft_get_forks_position(t_philo_info *philo);
+int					have_already_eaten_this_round(t_philo_info *philo);
+int					is_your_turn(t_philo_info *philo);
+int					ask_the_waiter(t_philo_info *philo);
 
 /*
 ** Philosophers lifestyle
