@@ -44,6 +44,7 @@ typedef struct		s_general_info{
 	int				pos;
 	int				round;
 	int				philos_finished_round;
+
 	int				n_philos;
 	int				time_die;
 	int				time_eat;
