@@ -32,9 +32,9 @@ typedef struct		s_env{
 }					t_env;
 
 typedef struct		s_philo{
-	pthread_mutex_t right_fork;
-	pthread_mutex_t left_fork;
-	struct timeval	start_time;
+	pthread_mutex_t *right_fork;
+	pthread_mutex_t *left_fork;
+	t_time_ms		start_time;
 	pthread_t		thread;
 	t_env			*env;
 	int				pos;

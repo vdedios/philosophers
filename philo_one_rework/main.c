@@ -9,35 +9,12 @@ void	kill_all(t_philo *philo)
 	env = philo[0].env;
 	while (++i < env->n_philos)
 	{
-		pthread_mutex_destroy(&philo[i].left_fork);
-		pthread_mutex_destroy(&philo[i].right_fork);
+		pthread_mutex_destroy(philo[i].left_fork);
+		pthread_mutex_destroy(philo[i].right_fork);
 		//liberar tenedores
 	}
 	pthread_mutex_destroy(env->m_message);
 	free (philo);
-}
-
-void	organize_forks(t_env *env, t_philo *philo)
-{
-	pthread_mutex_t	*m_fork;
-	int				i;
-
-	i = -1;
-	m_fork = malloc(env->n_philos * sizeof(pthread_mutex_t));
-	if (!m_fork)
-		return ;
-	while (++i < env->n_philos)
-	{
-		if (i == 0)
-			philo[i].left_fork = m_fork[env->n_philos - 1];
-		else
-			philo[i].left_fork = m_fork[i - 1];
-		if (i == env->n_philos - 1)
-			philo[i].right_fork = m_fork[0];
-		else
-			philo[i].right_fork = m_fork[i];
-		pthread_mutex_init(&m_fork[i], NULL);
-	}
 }
 
 long int	ft_get_current_time(struct timeval current_time
@@ -67,6 +44,8 @@ void	ft_print_philo(t_philo *philo, int action)
 		write(1, " is sleeping\n", 13);
 	else if (action == THINKING)
 		write(1, " is thinking\n", 13);
+	else if (action == DEAD)
+		write(1, " has died\n", 10);
 	pthread_mutex_unlock((philo->env)->m_message);
 }
 
@@ -87,15 +66,35 @@ void	better_usleep(t_time_ms time_to_sleep)
 		usleep (1);
 }
 
-void	*eat(t_philo *philo)
+void	*eating(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->left_fork);
-	pthread_mutex_lock(&philo->right_fork);
+	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(philo->right_fork);
+	if (get_time() - philo->start_time > philo->env->time_die)
+	{
+		ft_print_philo(philo, DEAD);
+		exit(0);
+	}
+	philo->start_time = get_time();
 	ft_print_philo(philo, GOT_FORK);
 	ft_print_philo(philo, GOT_FORK);
+	ft_print_philo(philo, EATING);
 	better_usleep(philo->env->time_eat);
-	pthread_mutex_unlock(&philo->left_fork);
-	pthread_mutex_unlock(&philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	return (NULL);
+}
+
+void	*sleeping(t_philo *philo)
+{
+	ft_print_philo(philo, SLEEPING);
+	better_usleep(philo->env->time_sleep);
+	return (NULL);
+}
+
+void	*thinking(t_philo *philo)
+{
+	ft_print_philo(philo, THINKING);
 	return (NULL);
 }
 
@@ -103,11 +102,33 @@ void	*execution(void *ptr)
 {
 	while (1)
 	{
-		eat((t_philo *)ptr);
-		//sleep((t_philo *)ptr);
-		//think((t_philo *)ptr);
+		eating((t_philo *)ptr);
+		sleeping((t_philo *)ptr);
+		thinking((t_philo *)ptr);
 	}
 	return (NULL);
+}
+
+void	organize_forks(t_env *env, t_philo *philo)
+{
+	pthread_mutex_t	*m_fork;
+	int				i;
+
+	i = -1;
+	m_fork = malloc(env->n_philos * sizeof(pthread_mutex_t));
+	env->m_message = malloc(sizeof(pthread_mutex_t));
+	if (!m_fork || !env->m_message)
+		return ;
+	while (++i < env->n_philos)
+	{
+		if (i == 0)
+			philo[i].left_fork = &m_fork[env->n_philos - 1];
+		else
+			philo[i].left_fork = &m_fork[i - 1];
+		philo[i].right_fork = &m_fork[i];
+		pthread_mutex_init(&m_fork[i], NULL);
+	}
+	pthread_mutex_init(env->m_message, NULL);
 }
 
 void	*init_philos(t_env *env)
@@ -125,11 +146,14 @@ void	*init_philos(t_env *env)
 	{
 		philo[i].pos = i;
 		philo[i].env = env;
-		gettimeofday(&philo[i].start_time, NULL);
+		philo[i].start_time = get_time();
 		pthread_create(&philo[i].thread, NULL
 				, execution, (void *)&philo[i]);
 		i++;
 	}
+	i = -1;
+	while (++i < env->n_philos)
+		pthread_join(philo[i].thread, NULL);
 	//kill_all(philo);
 	return (NULL);
 }
