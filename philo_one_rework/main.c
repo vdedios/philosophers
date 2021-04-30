@@ -57,6 +57,7 @@ void	better_usleep(t_time_ms time_to_sleep)
 
 void	*eating(t_philo *philo)
 {
+	printf("[%d] L: %p; R: %p\n", philo->pos, philo->left_fork, philo->right_fork);
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
 	if (get_time() - philo->start_time > philo->env->time_die)
