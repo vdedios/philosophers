@@ -17,16 +17,6 @@ void	kill_all(t_philo *philo)
 	free (philo);
 }
 
-long int	ft_get_current_time(struct timeval current_time
-			, struct timeval init_time)
-{
-	long int	t;
-
-	t = (current_time.tv_sec - init_time.tv_sec) * 1000
-		+ (current_time.tv_usec - init_time.tv_usec) / 1000;
-	return (t);
-}
-
 t_time_ms	get_time(void)
 {
 	struct timeval	current;
@@ -40,7 +30,6 @@ void	ft_print_philo(t_philo *philo, int action)
 	struct timeval	current_time;
 
 	pthread_mutex_lock((philo->env)->m_message);
-	//gettimeofday(&current_time, NULL);
 	ft_itoa_write(get_time() - (philo->env)->init_time);
 	write(1, " philosopher_", 13);
 	ft_itoa_write(philo->pos);
@@ -124,8 +113,6 @@ void	organize_forks(t_env *env, t_philo *philo)
 
 void	*execution(void *ptr)
 {
-	pthread_mutex_lock(((t_philo *)ptr)->env->m_ready);
-	pthread_mutex_unlock(((t_philo *)ptr)->env->m_ready);
 	while (1)
 	{
 		eating((t_philo *)ptr);
@@ -141,13 +128,11 @@ void	*init_philos(t_env *env)
 	int		i;
 
 	i = 0;
-	//gettimeofday(&env->init_time, NULL);
 	env->init_time = get_time();
 	philo = malloc(env->n_philos * sizeof(t_philo));
 	if (!philo)
 		return (NULL);
 	organize_forks(env, philo);
-	pthread_mutex_lock(env->m_ready);
 	while (i < env->n_philos)
 	{
 		philo[i].pos = i;
@@ -157,7 +142,6 @@ void	*init_philos(t_env *env)
 				, execution, (void *)&philo[i]);
 		i++;
 	}
-	pthread_mutex_unlock(env->m_ready);
 	i = -1;
 	while (++i < env->n_philos)
 		pthread_join(philo[i].thread, NULL);
