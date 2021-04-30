@@ -68,9 +68,17 @@ void	better_usleep(t_time_ms time_to_sleep)
 
 void	*eating(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left_fork);
-	pthread_mutex_lock(philo->right_fork);
-	if (get_time() - philo->start_time > philo->env->time_die)
+	if (philo->pos % 2)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		pthread_mutex_lock(philo->right_fork);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(philo->left_fork);
+	}
+	if (get_time() - philo->start_time >= philo->env->time_die)
 	{
 		ft_print_philo(philo, DEAD);
 		exit(0);
