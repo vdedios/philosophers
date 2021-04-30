@@ -57,7 +57,6 @@ void	better_usleep(t_time_ms time_to_sleep)
 
 void	*eating(t_philo *philo)
 {
-	printf("[%d] L: %p; R: %p\n", philo->pos, philo->left_fork, philo->right_fork);
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
 	if (get_time() - philo->start_time > philo->env->time_die)
@@ -94,19 +93,20 @@ void	organize_forks(t_env *env, t_philo *philo)
 	int				i;
 
 	i = -1;
-	m_fork = malloc(env->n_philos * sizeof(pthread_mutex_t));
+	env->m_forks = malloc(env->n_philos * sizeof(pthread_mutex_t));
 	env->m_message = malloc(sizeof(pthread_mutex_t));
 	env->m_ready = malloc(env->n_philos * sizeof(pthread_mutex_t));
-	if (!m_fork || !env->m_message)
+	if (!env->m_forks || !env->m_message)
 		return ;
 	while (++i < env->n_philos)
 	{
 		if (i == 0)
-			philo[i].left_fork = &m_fork[env->n_philos - 1];
+			philo[i].left_fork = &env->m_forks[env->n_philos - 1];
 		else
-			philo[i].left_fork = &m_fork[i - 1];
-		philo[i].right_fork = &m_fork[i];
-		pthread_mutex_init(&m_fork[i], NULL);
+			philo[i].left_fork = &env->m_forks[i - 1];
+		philo[i].right_fork = &env->m_forks[i];
+		pthread_mutex_init(&env->m_forks[i], NULL);
+		pthread_mutex_lock(&env->m_forks[i]);
 	}
 	pthread_mutex_init(env->m_message, NULL);
 	pthread_mutex_init(env->m_ready, NULL);
@@ -145,7 +145,10 @@ void	*init_philos(t_env *env)
 	}
 	i = -1;
 	while (++i < env->n_philos)
+	{
 		pthread_join(philo[i].thread, NULL);
+		pthread_mutex_unlock(&env->m_forks[i]);
+	}
 	//kill_all(philo);
 	return (NULL);
 }
