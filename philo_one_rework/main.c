@@ -27,13 +27,21 @@ long int	ft_get_current_time(struct timeval current_time
 	return (t);
 }
 
+t_time_ms	get_time(void)
+{
+	struct timeval	current;
+
+	gettimeofday(&current, NULL);
+	return ((t_time_ms)(current.tv_sec * 1000 + current.tv_usec / 1000));
+}
+
 void	ft_print_philo(t_philo *philo, int action)
 {
 	struct timeval	current_time;
 
 	pthread_mutex_lock((philo->env)->m_message);
-	gettimeofday(&current_time, NULL);
-	ft_itoa_write(ft_get_current_time(current_time, (philo->env)->init_time));
+	//gettimeofday(&current_time, NULL);
+	ft_itoa_write(get_time() - (philo->env)->init_time);
 	write(1, " philosopher_", 13);
 	ft_itoa_write(philo->pos);
 	if (action == GOT_FORK)
@@ -47,14 +55,6 @@ void	ft_print_philo(t_philo *philo, int action)
 	else if (action == DEAD)
 		write(1, " has died\n", 10);
 	pthread_mutex_unlock((philo->env)->m_message);
-}
-
-t_time_ms	get_time(void)
-{
-	struct timeval	current;
-
-	gettimeofday(&current, NULL);
-	return ((t_time_ms)(current.tv_sec * 1000 + current.tv_usec / 1000));
 }
 
 void	better_usleep(t_time_ms time_to_sleep)
@@ -141,7 +141,8 @@ void	*init_philos(t_env *env)
 	int		i;
 
 	i = 0;
-	gettimeofday(&env->init_time, NULL);
+	//gettimeofday(&env->init_time, NULL);
+	env->init_time = get_time();
 	philo = malloc(env->n_philos * sizeof(t_philo));
 	if (!philo)
 		return (NULL);

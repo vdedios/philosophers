@@ -28,7 +28,7 @@ static long int	ft_size_num(long int n)
 	return (i);
 }
 
-void			ft_itoa_write(long int n)
+void			ft_itoa_write(unsigned long long n)
 {
 	long int	size;
 	char		digit;
