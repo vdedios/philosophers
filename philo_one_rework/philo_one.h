@@ -23,7 +23,6 @@ typedef unsigned long long	t_time_ms;
 
 typedef struct		s_env{
 	pthread_mutex_t *m_message;
-	pthread_mutex_t *m_ready;
 	t_time_ms		init_time;
 	int				n_philos;
 	int				time_die;

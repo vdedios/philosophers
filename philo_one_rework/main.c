@@ -114,7 +114,6 @@ void	organize_forks(t_env *env, t_philo *philo)
 	i = -1;
 	m_fork = malloc(env->n_philos * sizeof(pthread_mutex_t));
 	env->m_message = malloc(sizeof(pthread_mutex_t));
-	env->m_ready = malloc(env->n_philos * sizeof(pthread_mutex_t));
 	if (!m_fork || !env->m_message)
 		return ;
 	while (++i < env->n_philos)
@@ -127,13 +126,10 @@ void	organize_forks(t_env *env, t_philo *philo)
 		pthread_mutex_init(&m_fork[i], NULL);
 	}
 	pthread_mutex_init(env->m_message, NULL);
-	pthread_mutex_init(env->m_ready, NULL);
 }
 
 void	*execution(void *ptr)
 {
-	pthread_mutex_lock(((t_philo *)ptr)->env->m_ready);
-	pthread_mutex_unlock(((t_philo *)ptr)->env->m_ready);
 	while (1)
 	{
 		eating((t_philo *)ptr);
@@ -149,13 +145,11 @@ void	*init_philos(t_env *env)
 	int		i;
 
 	i = 0;
-	//gettimeofday(&env->init_time, NULL);
 	env->init_time = get_time();
 	philo = malloc(env->n_philos * sizeof(t_philo));
 	if (!philo)
 		return (NULL);
 	organize_forks(env, philo);
-	pthread_mutex_lock(env->m_ready);
 	while (i < env->n_philos)
 	{
 		philo[i].pos = i;
@@ -165,7 +159,6 @@ void	*init_philos(t_env *env)
 				, execution, (void *)&philo[i]);
 		i++;
 	}
-	pthread_mutex_unlock(env->m_ready);
 	i = -1;
 	while (++i < env->n_philos)
 		pthread_join(philo[i].thread, NULL);
