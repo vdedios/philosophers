@@ -27,8 +27,6 @@ t_time_ms	get_time(void)
 
 void	ft_print_philo(t_philo *philo, int action)
 {
-	struct timeval	current_time;
-
 	ft_itoa_write(get_time() - (philo->env)->init_time);
 	write(1, " philosopher_", 13);
 	ft_itoa_write(philo->pos);
@@ -65,8 +63,8 @@ void	*eating(t_philo *philo)
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
 	}
-	philo->start_time = get_time();
 	pthread_mutex_lock((philo->env)->m_message);
+	philo->start_time = get_time();
 	ft_print_philo(philo, GOT_FORK);
 	ft_print_philo(philo, GOT_FORK);
 	ft_print_philo(philo, EATING);
@@ -101,7 +99,8 @@ void	*check_status(void *ptr)
 	philo = ((t_philo *)ptr);
 	while (1)
 	{
-		if (get_time() - philo->start_time > philo->env->time_die)
+		if ((t_time_ms)(get_time() - philo->start_time)
+				> (t_time_ms)philo->env->time_die)
 		{
 			pthread_mutex_lock((philo->env)->m_message);
 			ft_print_philo(philo, DEAD);
@@ -188,7 +187,6 @@ void	*init_philos(t_env *env)
 
 int	main(int argc, char **argv)
 {
-	struct timeval	time;
 	t_env			*env;
 	int				i;
 

@@ -21,7 +21,7 @@
 ** [number_of_times_each_philosopher_must_eat]
 */
 
-typedef unsigned long long	t_time_ms;
+typedef long long	t_time_ms;
 
 typedef struct		s_env{
 	pthread_mutex_t *m_message;
