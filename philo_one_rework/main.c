@@ -27,6 +27,8 @@ t_time_ms	get_time(void)
 
 void	ft_print_philo(t_philo *philo, int action)
 {
+	struct timeval	current_time;
+
 	ft_itoa_write(get_time() - (philo->env)->init_time);
 	write(1, " philosopher_", 13);
 	ft_itoa_write(philo->pos);
@@ -95,22 +97,15 @@ void	*thinking(t_philo *philo)
 void	*check_status(void *ptr)
 {
 	t_philo *philo;
-	void	*philo_i;
-	int		i;
 
 	philo = ((t_philo *)ptr);
 	while (1)
 	{
-		if (get_time() - philo->start_time >= (t_time_ms)philo->env->time_die)
+		if (get_time() - philo->start_time >= philo->env->time_die)
 		{
 			pthread_mutex_lock((philo->env)->m_message);
 			ft_print_philo(philo, DEAD);
-			//i = -1;
-			//while (++i < philo->env->n_philos)
-			//{
-			//	philo_i = &philo->env->philos[i];
-			//	pthread_detach(((t_philo *)philo_i)->main_thread);
-			//}
+			pthread_mutex_unlock((philo->env)->m_end);
 			return (NULL);
 		}
 	}
@@ -118,16 +113,13 @@ void	*check_status(void *ptr)
 
 void	*execution(void *ptr)
 {
-	t_philo *philo;
-
-	philo = ((t_philo *)ptr);
-	pthread_create(&philo->status_thread, NULL
+	pthread_create(&((t_philo *)ptr)->status_thread, NULL
 			, check_status, ptr);
 	while (1)
 	{
-		eating(philo);
-		sleeping(philo);
-		thinking(philo);
+		eating((t_philo *)ptr);
+		sleeping((t_philo *)ptr);
+		thinking((t_philo *)ptr);
 	}
 	return (NULL);
 }
@@ -140,7 +132,6 @@ void	init_main_mutex(t_env *env)
 		return ;
 	pthread_mutex_init(env->m_message, NULL);
 	pthread_mutex_init(env->m_end, NULL);
-	pthread_mutex_lock(env->m_end);
 }
 
 void	dispense_forks(t_env *env, t_philo *philo)
@@ -163,20 +154,26 @@ void	dispense_forks(t_env *env, t_philo *philo)
 	}
 }
 
+void	*handle_end(void *ptr)
+{
+	pthread_mutex_lock((pthread_mutex_t *)ptr);
+	return (NULL);
+}
+
 void	*init_philos(t_env *env)
 {
+	pthread_t	flow_ctrl;
 	t_philo		*philo;
 	int			i;
 
 	i = 0;
 	env->init_time = get_time();
-	//env->status = RUN;
 	philo = malloc(env->n_philos * sizeof(t_philo));
-	//env->philos = (void *)philo;
 	if (!philo)
 		return (NULL);
 	dispense_forks(env, philo);
 	init_main_mutex(env);
+	pthread_mutex_lock(env->m_end);
 	while (i < env->n_philos)
 	{
 		philo[i].pos = i;
@@ -186,14 +183,13 @@ void	*init_philos(t_env *env)
 				, execution, (void *)&philo[i]);
 		i++;
 	}
-	i = -1;
-	while (++i < env->n_philos)
-		pthread_join(philo[i].main_thread, NULL);
+	pthread_mutex_lock(env->m_end);
 	return (NULL);
 }
 
 int	main(int argc, char **argv)
 {
+	struct timeval	time;
 	t_env			env;
 	int				i;
 
@@ -211,3 +207,4 @@ int	main(int argc, char **argv)
 	init_philos(&env);
 	return (0);
 }
+
