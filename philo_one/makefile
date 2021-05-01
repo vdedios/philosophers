@@ -8,6 +8,10 @@ CFLAGS+= -I.
 SRC_DIR=./
 OBJ_DIR=objs/
 SRCS= main.c \
+	  clean.c \
+	  exec.c \
+	  init.c \
+	  time.c \
 	  utils.c
 
 OBJS=$(addprefix $(OBJ_DIR), $(SRCS:.c=.o))

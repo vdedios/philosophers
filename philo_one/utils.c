@@ -59,3 +59,20 @@ int				ft_save_args(int argc, char **argv, t_env *info)
 		info->n_eat = -1;
 	return (1);
 }
+
+void	ft_print_philo(t_philo *philo, int action)
+{
+	ft_itoa_write(get_time() - (philo->env)->init_time);
+	write(1, " philosopher_", 13);
+	ft_itoa_write(philo->pos);
+	if (action == GOT_FORK)
+		write(1, " has taken a fork\n", 18);
+	else if (action == EATING)
+		write(1, " is eating\n", 11);
+	else if (action == SLEEPING)
+		write(1, " is sleeping\n", 13);
+	else if (action == THINKING)
+		write(1, " is thinking\n", 13);
+	else if (action == DEAD)
+		write(1, " has died\n", 10);
+}

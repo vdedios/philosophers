@@ -46,12 +46,42 @@ typedef struct		s_philo{
 }					t_philo;
 
 /*
+** Initialization functions
+*/
+
+void	init_main_mutex(t_env *env);
+void	dispense_forks(t_env *env, t_philo *philo);
+
+/*
+** Execution functions
+*/
+
+void	*eating(t_philo *philo);
+void	*sleeping(t_philo *philo);
+void	*thinking(t_philo *philo);
+void	*check_status(void *ptr);
+void	*execution(void *ptr);
+
+/*
+** Time functions
+*/
+
+t_time_ms	get_time(void);
+void		better_usleep(t_time_ms time_to_sleep);
+
+/*
 ** Utils
 */
 
 int				ft_atoi(const char *str);
-//static long int	ft_size_num(long int n);
 void			ft_itoa_write(unsigned long long n);
 int				ft_save_args(int argc, char **argv, t_env *info);
+void		ft_print_philo(t_philo *philo, int action);
+
+/*
+** Cleaning
+*/
+
+void	kill_all(t_env *env, t_philo *philos);
 
 #endif
