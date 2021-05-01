@@ -27,10 +27,6 @@ t_time_ms	get_time(void)
 
 void	ft_print_philo(t_philo *philo, int action)
 {
-	struct timeval	current_time;
-
-	//pthread_mutex_lock((philo->env)->m_message);
-	//gettimeofday(&current_time, NULL);
 	ft_itoa_write(get_time() - (philo->env)->init_time);
 	write(1, " philosopher_", 13);
 	ft_itoa_write(philo->pos);
@@ -44,7 +40,6 @@ void	ft_print_philo(t_philo *philo, int action)
 		write(1, " is thinking\n", 13);
 	else if (action == DEAD)
 		write(1, " has died\n", 10);
-	//pthread_mutex_unlock((philo->env)->m_message);
 }
 
 void	better_usleep(t_time_ms time_to_sleep)
@@ -104,7 +99,7 @@ void	*check_status(void *ptr)
 	philo = ((t_philo *)ptr);
 	while (1)
 	{
-		if (get_time() - philo->start_time >= philo->env->time_die)
+		if (get_time() - philo->start_time >= (t_time_ms)philo->env->time_die)
 		{
 			pthread_mutex_lock((philo->env)->m_message);
 			ft_print_philo(philo, DEAD);
@@ -116,13 +111,17 @@ void	*check_status(void *ptr)
 
 void	*execution(void *ptr)
 {
-	pthread_create(&((t_philo *)ptr)->status_thread, NULL
+	t_philo *philo;
+
+	philo = ((t_philo *)ptr);
+	pthread_create(&philo->status_thread, NULL
 			, check_status, ptr);
+	//pthread_detach(philo->main_thread);
 	while (1)
 	{
-		eating((t_philo *)ptr);
-		sleeping((t_philo *)ptr);
-		thinking((t_philo *)ptr);
+		eating(philo);
+		sleeping(philo);
+		thinking(philo);
 	}
 	return (NULL);
 }
@@ -158,15 +157,15 @@ void	dispense_forks(t_env *env, t_philo *philo)
 	}
 }
 
-void	*handle_end(void *ptr)
-{
-	pthread_mutex_lock((pthread_mutex_t *)ptr);
-	return (NULL);
-}
+//void	*handle_end(void *ptr)
+//{
+//	pthread_mutex_lock((pthread_mutex_t *)ptr);
+//	return (NULL);
+//}
 
 void	*init_philos(t_env *env)
 {
-	pthread_t	flow_ctrl;
+	//pthread_t	flow_ctrl;
 	t_philo		*philo;
 	int			i;
 
@@ -184,18 +183,20 @@ void	*init_philos(t_env *env)
 		philo[i].start_time = get_time();
 		pthread_create(&philo[i].main_thread, NULL
 				, execution, (void *)&philo[i]);
+		pthread_detach(philo[i].main_thread);
 		i++;
 	}
-	pthread_create(&flow_ctrl, NULL
-			, handle_end, (void *)env->m_end);
-	pthread_join(flow_ctrl, NULL);
+	//pthread_create(&flow_ctrl, NULL
+	//		, handle_end, (void *)env->m_end);
+	//pthread_join(flow_ctrl, NULL);
+	//pthread_mutex_lock(env->m_end);
 	//kill_all(philo);
+	printf("halo\n");
 	return (NULL);
 }
 
 int	main(int argc, char **argv)
 {
-	struct timeval	time;
 	t_env			env;
 	int				i;
 

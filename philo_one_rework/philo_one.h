@@ -48,7 +48,7 @@ typedef struct		s_philo{
 */
 
 int				ft_atoi(const char *str);
-static long int	ft_size_num(long int n);
+//static long int	ft_size_num(long int n);
 void			ft_itoa_write(unsigned long long n);
 int				ft_save_args(int argc, char **argv, t_env *info);
 
