@@ -68,7 +68,7 @@ void			ft_is_philo_alive(t_philo_info *philo)
 		write(1, " philosopher_", 13);
 		ft_itoa_write(philo->num_philo);
 		write(1, " died\n", 6);
-		pthread_mutex_unlock(&philo->general->get_out);
+		//pthread_mutex_unlock(&philo->general->get_out);
 	}
 	else
 		pthread_mutex_unlock(&philo->general->message);
