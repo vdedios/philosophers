@@ -2,7 +2,8 @@
 NAME=philo_one
 
 CC=gcc
-CFLAGS=-g -Wall -Wextra -Werror
+#CFLAGS=-g -Wall -Wextra -Werror
+CFLAGS=
 CFLAGS+= -I.
 
 SRC_DIR=./

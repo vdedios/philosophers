@@ -95,6 +95,8 @@ void	*thinking(t_philo *philo)
 void	*check_status(void *ptr)
 {
 	t_philo *philo;
+	void	*philo_i;
+	int		i;
 
 	philo = ((t_philo *)ptr);
 	while (1)
@@ -103,7 +105,12 @@ void	*check_status(void *ptr)
 		{
 			pthread_mutex_lock((philo->env)->m_message);
 			ft_print_philo(philo, DEAD);
-			pthread_mutex_unlock((philo->env)->m_end);
+			//i = -1;
+			//while (++i < philo->env->n_philos)
+			//{
+			//	philo_i = &philo->env->philos[i];
+			//	pthread_detach(((t_philo *)philo_i)->main_thread);
+			//}
 			return (NULL);
 		}
 	}
@@ -116,7 +123,6 @@ void	*execution(void *ptr)
 	philo = ((t_philo *)ptr);
 	pthread_create(&philo->status_thread, NULL
 			, check_status, ptr);
-	//pthread_detach(philo->main_thread);
 	while (1)
 	{
 		eating(philo);
@@ -157,21 +163,16 @@ void	dispense_forks(t_env *env, t_philo *philo)
 	}
 }
 
-//void	*handle_end(void *ptr)
-//{
-//	pthread_mutex_lock((pthread_mutex_t *)ptr);
-//	return (NULL);
-//}
-
 void	*init_philos(t_env *env)
 {
-	//pthread_t	flow_ctrl;
 	t_philo		*philo;
 	int			i;
 
 	i = 0;
 	env->init_time = get_time();
+	//env->status = RUN;
 	philo = malloc(env->n_philos * sizeof(t_philo));
+	//env->philos = (void *)philo;
 	if (!philo)
 		return (NULL);
 	dispense_forks(env, philo);
@@ -183,15 +184,11 @@ void	*init_philos(t_env *env)
 		philo[i].start_time = get_time();
 		pthread_create(&philo[i].main_thread, NULL
 				, execution, (void *)&philo[i]);
-		pthread_detach(philo[i].main_thread);
 		i++;
 	}
-	//pthread_create(&flow_ctrl, NULL
-	//		, handle_end, (void *)env->m_end);
-	//pthread_join(flow_ctrl, NULL);
-	//pthread_mutex_lock(env->m_end);
-	//kill_all(philo);
-	printf("halo\n");
+	i = -1;
+	while (++i < env->n_philos)
+		pthread_join(philo[i].main_thread, NULL);
 	return (NULL);
 }
 

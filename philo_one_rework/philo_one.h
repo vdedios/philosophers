@@ -6,6 +6,8 @@
 # define SLEEPING 3
 # define THINKING 4
 # define DEAD 5
+# define RUN 6
+# define END 7
 
 # include <stdio.h>
 # include <unistd.h>
@@ -24,6 +26,7 @@ typedef unsigned long long	t_time_ms;
 typedef struct		s_env{
 	pthread_mutex_t *m_message;
 	pthread_mutex_t *m_end;
+	void			*philos;
 	pthread_t		status_thread;
 	t_time_ms		init_time;
 	int				n_philos;
@@ -31,6 +34,7 @@ typedef struct		s_env{
 	int				time_eat;
 	int				time_sleep;
 	int				n_eat;
+	short			status;
 }					t_env;
 
 typedef struct		s_philo{
