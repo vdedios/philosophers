@@ -6,8 +6,7 @@
 # define SLEEPING 3
 # define THINKING 4
 # define DEAD 5
-# define RUN 6
-# define END 7
+# define FINISH 6
 
 # include <stdio.h>
 # include <unistd.h>
@@ -25,14 +24,16 @@ typedef long long	t_time_ms;
 
 typedef struct		s_env{
 	pthread_mutex_t *m_message;
-	pthread_mutex_t *m_forks;
 	pthread_mutex_t *m_watchdog;
+	pthread_mutex_t *m_forks;
+	pthread_mutex_t *m_status;
 	t_time_ms		init_time;
 	int				n_philos;
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;
-	int				n_eat;
+	int				meal_limit;
+	int				philos_finished;
 }					t_env;
 
 typedef struct		s_philo{
@@ -43,6 +44,7 @@ typedef struct		s_philo{
 	pthread_t		status_thread;
 	t_env			*env;
 	int				pos;
+	int				n_meals;
 }					t_philo;
 
 /*
@@ -53,13 +55,19 @@ void	init_main_mutex(t_env *env);
 void	dispense_forks(t_env *env, t_philo *philo);
 
 /*
+** Status check functions
+*/
+
+void	*check_status(void *ptr);
+void	check_philo_meals(t_philo *philo);
+
+/*
 ** Execution functions
 */
 
 void	*eating(t_philo *philo);
 void	*sleeping(t_philo *philo);
 void	*thinking(t_philo *philo);
-void	*check_status(void *ptr);
 void	*execution(void *ptr);
 
 /*

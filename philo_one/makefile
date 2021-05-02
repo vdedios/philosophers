@@ -8,6 +8,7 @@ CFLAGS+= -I.
 SRC_DIR=./
 OBJ_DIR=objs/
 SRCS= main.c \
+	  check.c \
 	  clean.c \
 	  exec.c \
 	  init.c \

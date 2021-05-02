@@ -17,6 +17,7 @@ void	*run_philos(t_env *env)
 	{
 		philos[i].pos = i;
 		philos[i].env = env;
+		philos[i].n_meals = 0;
 		philos[i].start_time = get_time();
 		pthread_create(&philos[i].main_thread, NULL
 				, execution, (void *)&philos[i]);
@@ -38,12 +39,12 @@ int	main(int argc, char **argv)
 		return (0);
 	if (argc < 5 || argc > 6)
 	{
-		write(1, "wrong number of args :(\n", 24);
+		write(1, "Wrong number of args.\n", 22);
 		return (0);
 	}
 	if (!ft_save_args(argc, argv, env))
 	{
-		write(1, "wrong args :(\n", 14);
+		write(1, "Wrong args format.\n", 19);
 		return (0);
 	}
 	run_philos(env);
