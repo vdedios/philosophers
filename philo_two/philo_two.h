@@ -14,6 +14,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <limits.h>
+# include <semaphore.h>
 
 /*
 ** number_of_philosophers time_to_die time_to_eat time_to_sleep
@@ -23,10 +24,10 @@
 typedef long long	t_time_ms;
 
 typedef struct s_env{
-	pthread_mutex_t	*m_message;
-	pthread_mutex_t	*m_watchdog;
-	pthread_mutex_t	*m_forks;
-	pthread_mutex_t	*m_status;
+	sem_t			*s_message;
+	sem_t			*s_watchdog;
+	sem_t			*s_status;
+	sem_t			**s_forks;
 	t_time_ms		init_time;
 	int				n_philos;
 	int				time_die;
@@ -37,8 +38,8 @@ typedef struct s_env{
 }					t_env;
 
 typedef struct s_philo{
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*left_fork;
+	sem_t			*right_fork;
+	sem_t			*left_fork;
 	t_time_ms		start_time;
 	pthread_t		main_thread;
 	pthread_t		status_thread;

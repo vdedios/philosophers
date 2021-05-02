@@ -1,5 +1,5 @@
 # ENVS
-NAME=philo_one
+NAME=philo_two
 
 CC=gcc
 CFLAGS=-g -Wall -Wextra -Werror

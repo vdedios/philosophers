@@ -11,8 +11,10 @@ void	kill_all(t_env *env, t_philo *philos)
 	}
 	pthread_mutex_destroy(env->m_message);
 	pthread_mutex_destroy(env->m_watchdog);
+	pthread_mutex_destroy(env->m_status);
 	free (env->m_message);
 	free (env->m_watchdog);
+	free (env->m_status);
 	free(env->m_forks);
 	free(philos);
 }

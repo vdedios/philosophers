@@ -1,14 +1,14 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 void	check_philo_meals(t_philo *philo)
 {
-	pthread_mutex_lock((philo->env)->m_status);
+	sem_wait((philo->env)->s_status);
 	if (philo->n_meals == philo->env->meal_limit)
 	{
 		philo->env->philos_finished++;
 		philo->n_meals++;
 	}
-	pthread_mutex_unlock((philo->env)->m_status);
+	sem_post((philo->env)->s_status);
 }
 
 void	*check_status(void *ptr)
@@ -21,17 +21,17 @@ void	*check_status(void *ptr)
 		check_philo_meals(philo);
 		if (philo->env->philos_finished == philo->env->n_philos)
 		{
-			pthread_mutex_lock((philo->env)->m_message);
+			sem_wait((philo->env)->s_message);
 			ft_print_philo(philo, FINISH);
-			pthread_mutex_unlock((philo->env)->m_watchdog);
+			sem_post((philo->env)->s_watchdog);
 			return (NULL);
 		}
 		if ((t_time_ms)(get_time() - philo->start_time)
 				> (t_time_ms)philo->env->time_die)
 		{
-			pthread_mutex_lock((philo->env)->m_message);
+			sem_wait((philo->env)->s_message);
 			ft_print_philo(philo, DEAD);
-			pthread_mutex_unlock((philo->env)->m_watchdog);
+			sem_post((philo->env)->s_watchdog);
 			return (NULL);
 		}
 	}

@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 void	*run_philos(t_env *env)
 {
@@ -12,7 +12,6 @@ void	*run_philos(t_env *env)
 		return (NULL);
 	dispense_forks(env, philos);
 	init_main_mutex(env);
-	pthread_mutex_lock(env->m_watchdog);
 	while (i < env->n_philos)
 	{
 		philos[i].pos = i;
@@ -23,7 +22,7 @@ void	*run_philos(t_env *env)
 			execution, (void *)&philos[i]);
 		i++;
 	}
-	pthread_mutex_lock(env->m_watchdog);
+	sem_wait(env->s_watchdog);
 	kill_all(env, philos);
 	return (NULL);
 }

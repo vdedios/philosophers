@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 t_time_ms	get_time(void)
 {

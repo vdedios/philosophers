@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 void	*eating(t_philo *philo)
 {
@@ -6,42 +6,42 @@ void	*eating(t_philo *philo)
 	{
 		if (philo->pos % 2)
 		{
-			pthread_mutex_lock(philo->left_fork);
-			pthread_mutex_lock(philo->right_fork);
+			sem_wait(philo->left_fork);
+			sem_wait(philo->right_fork);
 		}
 		else
 		{
-			pthread_mutex_lock(philo->right_fork);
-			pthread_mutex_lock(philo->left_fork);
+			sem_wait(philo->right_fork);
+			sem_wait(philo->left_fork);
 		}
-		pthread_mutex_lock((philo->env)->m_message);
+		sem_wait((philo->env)->s_message);
 		philo->n_meals++;
 		philo->start_time = get_time();
 		ft_print_philo(philo, GOT_FORK);
 		ft_print_philo(philo, GOT_FORK);
 		ft_print_philo(philo, EATING);
-		pthread_mutex_unlock((philo->env)->m_message);
+		sem_post((philo->env)->s_message);
 		better_usleep(philo->env->time_eat);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
+		sem_post(philo->left_fork);
+		sem_post(philo->right_fork);
 	}
 	return (NULL);
 }
 
 void	*sleeping(t_philo *philo)
 {
-	pthread_mutex_lock((philo->env)->m_message);
+	sem_wait((philo->env)->s_message);
 	ft_print_philo(philo, SLEEPING);
-	pthread_mutex_unlock((philo->env)->m_message);
+    sem_post((philo->env)->s_message);
 	better_usleep(philo->env->time_sleep);
 	return (NULL);
 }
 
 void	*thinking(t_philo *philo)
 {
-	pthread_mutex_lock((philo->env)->m_message);
+	sem_wait((philo->env)->s_message);
 	ft_print_philo(philo, THINKING);
-	pthread_mutex_unlock((philo->env)->m_message);
+    sem_post((philo->env)->s_message);
 	return (NULL);
 }
 
