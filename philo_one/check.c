@@ -13,7 +13,7 @@ void	check_philo_meals(t_philo *philo)
 
 void	*check_status(void *ptr)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = ((t_philo *)ptr);
 	while (1)

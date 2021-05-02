@@ -2,7 +2,7 @@
 
 void	kill_all(t_env *env, t_philo *philos)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < env->n_philos)

@@ -19,8 +19,8 @@ void	*run_philos(t_env *env)
 		philos[i].env = env;
 		philos[i].n_meals = 0;
 		philos[i].start_time = get_time();
-		pthread_create(&philos[i].main_thread, NULL
-				, execution, (void *)&philos[i]);
+		pthread_create(&philos[i].main_thread, NULL,
+			execution, (void *)&philos[i]);
 		i++;
 	}
 	pthread_mutex_lock(env->m_watchdog);

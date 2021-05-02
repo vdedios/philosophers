@@ -47,8 +47,7 @@ void	*thinking(t_philo *philo)
 
 void	*execution(void *ptr)
 {
-	pthread_create(&((t_philo *)ptr)->status_thread, NULL
-			, check_status, ptr);
+	pthread_create(&((t_philo *)ptr)->status_thread, NULL, check_status, ptr);
 	while (1)
 	{
 		eating((t_philo *)ptr);

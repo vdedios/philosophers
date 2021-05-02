@@ -22,11 +22,11 @@
 
 typedef long long	t_time_ms;
 
-typedef struct		s_env{
-	pthread_mutex_t *m_message;
-	pthread_mutex_t *m_watchdog;
-	pthread_mutex_t *m_forks;
-	pthread_mutex_t *m_status;
+typedef struct s_env{
+	pthread_mutex_t	*m_message;
+	pthread_mutex_t	*m_watchdog;
+	pthread_mutex_t	*m_forks;
+	pthread_mutex_t	*m_status;
 	t_time_ms		init_time;
 	int				n_philos;
 	int				time_die;
@@ -36,9 +36,9 @@ typedef struct		s_env{
 	int				philos_finished;
 }					t_env;
 
-typedef struct		s_philo{
-	pthread_mutex_t *right_fork;
-	pthread_mutex_t *left_fork;
+typedef struct s_philo{
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
 	t_time_ms		start_time;
 	pthread_t		main_thread;
 	pthread_t		status_thread;
@@ -51,45 +51,45 @@ typedef struct		s_philo{
 ** Initialization functions
 */
 
-void	init_main_mutex(t_env *env);
-void	dispense_forks(t_env *env, t_philo *philo);
+void				init_main_mutex(t_env *env);
+void				dispense_forks(t_env *env, t_philo *philo);
 
 /*
 ** Status check functions
 */
 
-void	*check_status(void *ptr);
-void	check_philo_meals(t_philo *philo);
+void				*check_status(void *ptr);
+void				check_philo_meals(t_philo *philo);
 
 /*
 ** Execution functions
 */
 
-void	*eating(t_philo *philo);
-void	*sleeping(t_philo *philo);
-void	*thinking(t_philo *philo);
-void	*execution(void *ptr);
+void				*eating(t_philo *philo);
+void				*sleeping(t_philo *philo);
+void				*thinking(t_philo *philo);
+void				*execution(void *ptr);
 
 /*
 ** Time functions
 */
 
-t_time_ms	get_time(void);
-void		better_usleep(t_time_ms time_to_sleep);
+t_time_ms			get_time(void);
+void				better_usleep(t_time_ms time_to_sleep);
 
 /*
 ** Utils
 */
 
-int				ft_atoi(const char *str);
-void			ft_itoa_write(unsigned long long n);
-int				ft_save_args(int argc, char **argv, t_env *info);
-void		ft_print_philo(t_philo *philo, int action);
+int					ft_atoi(const char *str);
+void				ft_itoa_write(unsigned long long n);
+int					ft_save_args(int argc, char **argv, t_env *info);
+void				ft_print_philo(t_philo *philo, int action);
 
 /*
 ** Cleaning
 */
 
-void	kill_all(t_env *env, t_philo *philos);
+void				kill_all(t_env *env, t_philo *philos);
 
 #endif

@@ -1,8 +1,8 @@
 #include "philo_one.h"
 
-int				ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
-	int nbr;
+	int	nbr;
 
 	nbr = 0;
 	while (*str >= '0' && *str <= '9')
@@ -17,7 +17,7 @@ int				ft_atoi(const char *str)
 
 static long int	ft_size_num(long int n)
 {
-	long int i;
+	long int	i;
 
 	i = 1;
 	while (n >= 10)
@@ -28,7 +28,7 @@ static long int	ft_size_num(long int n)
 	return (i);
 }
 
-void			ft_itoa_write(unsigned long long n)
+void	ft_itoa_write(unsigned long long n)
 {
 	long int	size;
 	char		digit;
@@ -43,16 +43,18 @@ void			ft_itoa_write(unsigned long long n)
 	}
 }
 
-int				ft_save_args(int argc, char **argv, t_env *info)
+int	ft_save_args(int argc, char **argv, t_env *info)
 {
-	if (!(info->n_philos = ft_atoi(argv[1]))
-			|| !(info->time_die = ft_atoi(argv[2]))
-			|| !(info->time_eat = ft_atoi(argv[3]))
-			|| !(info->time_sleep = ft_atoi(argv[4])))
+	info->n_philos = ft_atoi(argv[1]);
+	if (!info->n_philos
+		|| !(info->time_die = ft_atoi(argv[2]))
+		|| !(info->time_eat = ft_atoi(argv[3]))
+		|| !(info->time_sleep = ft_atoi(argv[4])))
 		return (0);
 	if (argc == 6)
 	{
-		if (!(info->meal_limit = ft_atoi(argv[5])))
+		info->meal_limit = ft_atoi(argv[5]);
+		if (!info->meal_limit)
 			return (0);
 	}
 	else
