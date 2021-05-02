@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vde-dios <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/29 17:46:19 by vde-dios          #+#    #+#             */
-/*   Updated: 2020/07/09 16:27:00 by vde-dios         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef PHILO_ONE_H
 # define PHILO_ONE_H
 
@@ -18,12 +6,12 @@
 # define SLEEPING 3
 # define THINKING 4
 # define DEAD 5
+# define FINISH 6
 
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <pthread.h>
-# include <semaphore.h>
 # include <sys/time.h>
 # include <limits.h>
 
@@ -32,56 +20,76 @@
 ** [number_of_times_each_philosopher_must_eat]
 */
 
-typedef struct		s_general_info{
-	sem_t			*waiter;
-	sem_t			*message;
-	sem_t			*get_out;
-	sem_t			*counter;
-	pthread_t		watchdog;
-	struct timeval	init_time;
-	int				*turns;
-	int				forks;
-	int				round;
-	int				pos;
-	int				philos_finished_round;
+typedef long long	t_time_ms;
+
+typedef struct s_env{
+	pthread_mutex_t	*m_message;
+	pthread_mutex_t	*m_watchdog;
+	pthread_mutex_t	*m_forks;
+	pthread_mutex_t	*m_status;
+	t_time_ms		init_time;
 	int				n_philos;
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;
-	int				n_eat;
-}					t_general_info;
+	int				meal_limit;
+	int				philos_finished;
+}					t_env;
 
-typedef struct		s_philo_info{
-	pthread_t		thread;
-	t_general_info	*general;
-	struct timeval	critical_time;
-	int				num_philo;
-	int				times_eaten;
-}					t_philo_info;
+typedef struct s_philo{
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
+	t_time_ms		start_time;
+	pthread_t		main_thread;
+	pthread_t		status_thread;
+	t_env			*env;
+	int				pos;
+	int				n_meals;
+}					t_philo;
+
+/*
+** Initialization functions
+*/
+
+void				init_main_mutex(t_env *env);
+void				dispense_forks(t_env *env, t_philo *philo);
+
+/*
+** Status check functions
+*/
+
+void				*check_status(void *ptr);
+void				check_philo_meals(t_philo *philo);
+
+/*
+** Execution functions
+*/
+
+void				*eating(t_philo *philo);
+void				*sleeping(t_philo *philo);
+void				*thinking(t_philo *philo);
+void				*execution(void *ptr);
+
+/*
+** Time functions
+*/
+
+t_time_ms			get_time(void);
+void				better_usleep(t_time_ms time_to_sleep);
 
 /*
 ** Utils
 */
 
 int					ft_atoi(const char *str);
-void				ft_itoa_write(long int num);
-void				ft_print_philo(t_philo_info *philo, int action);
-void				ft_is_philo_alive(t_philo_info *philo);
-int					ft_save_args(int argc, char **argv, t_general_info *info);
-long int			ft_get_current_time(struct timeval current_time
-										, struct timeval init_time);
-void				*init_sems_and_variables(t_general_info *general);
-void				ft_get_forks_position(t_philo_info *philo);
-int					have_already_eaten_this_round(t_philo_info *philo);
-int					is_your_turn(t_philo_info *philo);
-int					ask_the_waiter(t_philo_info *philo);
+void				ft_itoa_write(unsigned long long n);
+int					ft_save_args(int argc, char **argv, t_env *info);
+void				ft_print_philo(t_philo *philo, int action);
 
 /*
-** Philosophers lifestyle
+** Cleaning
 */
 
-void				*philo_get_forks(t_philo_info *philo);
-void				*philo_eat(t_philo_info *philo);
-void				*philo_sleep_and_think(t_philo_info *philo);
+void				kill_all(t_env *env, t_philo *philos);
 
 #endif
