@@ -27,7 +27,7 @@ typedef struct s_env{
 	sem_t			*s_message;
 	sem_t			*s_watchdog;
 	sem_t			*s_status;
-	sem_t			**s_forks;
+	sem_t			*s_forks;
 	t_time_ms		init_time;
 	int				n_philos;
 	int				time_die;
@@ -38,8 +38,6 @@ typedef struct s_env{
 }					t_env;
 
 typedef struct s_philo{
-	sem_t			*right_fork;
-	sem_t			*left_fork;
 	t_time_ms		start_time;
 	pthread_t		main_thread;
 	pthread_t		status_thread;
@@ -52,8 +50,7 @@ typedef struct s_philo{
 ** Initialization functions
 */
 
-void				init_main_mutex(t_env *env);
-void				dispense_forks(t_env *env, t_philo *philo);
+void				init_sems(t_env *env);
 
 /*
 ** Status check functions

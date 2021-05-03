@@ -4,16 +4,8 @@ void	*eating(t_philo *philo)
 {
 	if (philo->env->meal_limit < 0 || philo->n_meals <= philo->env->meal_limit)
 	{
-		if (philo->pos % 2)
-		{
-			sem_wait(philo->left_fork);
-			sem_wait(philo->right_fork);
-		}
-		else
-		{
-			sem_wait(philo->right_fork);
-			sem_wait(philo->left_fork);
-		}
+		sem_wait(philo->env->s_forks);
+		sem_wait(philo->env->s_forks);
 		sem_wait((philo->env)->s_message);
 		philo->n_meals++;
 		philo->start_time = get_time();
@@ -22,8 +14,8 @@ void	*eating(t_philo *philo)
 		ft_print_philo(philo, EATING);
 		sem_post((philo->env)->s_message);
 		better_usleep(philo->env->time_eat);
-		sem_post(philo->left_fork);
-		sem_post(philo->right_fork);
+		sem_post(philo->env->s_forks);
+		sem_post(philo->env->s_forks);
 	}
 	return (NULL);
 }

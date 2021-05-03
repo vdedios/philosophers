@@ -10,8 +10,7 @@ void	*run_philos(t_env *env)
 	philos = malloc(env->n_philos * sizeof(t_philo));
 	if (!philos)
 		return (NULL);
-	dispense_forks(env, philos);
-	init_main_mutex(env);
+	init_sems(env);
 	while (i < env->n_philos)
 	{
 		philos[i].pos = i;
