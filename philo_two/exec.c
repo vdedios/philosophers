@@ -24,7 +24,7 @@ void	*sleeping(t_philo *philo)
 {
 	sem_wait((philo->env)->s_message);
 	ft_print_philo(philo, SLEEPING);
-    sem_post((philo->env)->s_message);
+	sem_post((philo->env)->s_message);
 	better_usleep(philo->env->time_sleep);
 	return (NULL);
 }
@@ -33,7 +33,7 @@ void	*thinking(t_philo *philo)
 {
 	sem_wait((philo->env)->s_message);
 	ft_print_philo(philo, THINKING);
-    sem_post((philo->env)->s_message);
+	sem_post((philo->env)->s_message);
 	return (NULL);
 }
 
