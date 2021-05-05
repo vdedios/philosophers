@@ -1,6 +1,8 @@
 # Philosophers
 
 A classic thread management problem.
+
+![philos](philosphers_demo.gif)
 ## The problem
 
 K philosophers seated around a circular table. There is one chopstick between each philosopher. A philosopher may eat if he can pickup the two chopsticks adjacent to him. If each philosopher does not eat in a specefic time he may die. The goal of this problem is to correctly manage all resources so no philosopher dies.
